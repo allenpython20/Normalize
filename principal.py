@@ -65,4 +65,5 @@ if __name__ == "__main__":
 	# datos = oferta.select_prueba(con)
 	# print(datos)
 	# for d in dic:
-	# 	oferta.update_prueba(con,d)			
+	# 	oferta.update_prueba(con,d)		
+	print("hola")	
