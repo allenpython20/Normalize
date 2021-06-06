@@ -17,7 +17,6 @@ class DBOfertadetalle:
                      WHERE ofertaperfil_id=3
                      GROUP BY id_ofertadetalle,ofertaperfil_id,descripcion_normalizada 
                      ORDER BY 1,2,3 ASC
-                     LIMIT 1000
                      """
             #params f (requisito["descripcion_normalizada"], requisito["iddescripcion"])
             mycursor.execute(sql)
