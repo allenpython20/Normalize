@@ -10,6 +10,7 @@ import unicodedata
 import datetime
 from googletrans import Translator
 from mtranslate import translate
+from bs4 import BeautifulSoup
 import string 
 
 class PreProcessing:
@@ -40,13 +41,43 @@ class PreProcessing:
             new_words.append(new_word)
         return new_words
 
+    def remove_incomplete_tags_html(self,words):
+        new_words = []
+        rep = {"<STRONG": "", "STRONG>": ""} # define desired replacements here
+        for word in words:
+            rep = dict((re.escape(k), v) for k, v in rep.items()) 
+            pattern = re.compile("|".join(rep.keys()))
+            new_word = pattern.sub(lambda m: rep[re.escape(m.group(0))], word)
+            new_words.append(new_word)
+        return new_words
+
+    def remove_tags_html(self,words):
+        new_words = []
+        for word in words:
+            new_word = BeautifulSoup(word, "lxml").text
+            new_words.append(new_word)
+        return new_words
+
+
     def remove_punctuation_space_start(self,words):
         new_words = []
         for word in words:
             word = word.lower()
             #\$%&\'\(\)\*\+,\-./:;<=>\?@\[\\\]\^_\`\{\|\}~
             #new_word =  re.sub('^[0-9#!\$\?\.\*\|\{\}\+_:\-=· ]*','',word)
-            new_word =  re.sub('^[#!$?.*()|,+_:=·\- ]*','',word)
+            new_word =  re.sub('^[0-9#!$¿?.*<>()|,+_:=·\- ]*','',word)
+            #new_word =  re.sub('^[#!\$\?\.\*\|\{\}\+-_:=·• ]*','',word)
+            new_word = new_word.upper()
+            new_words.append(new_word)
+        return new_words
+
+    def remove_punctuation_space_start2(self,words):
+        new_words = []
+        for word in words:
+            word = word.lower()
+            #\$%&\'\(\)\*\+,\-./:;<=>\?@\[\\\]\^_\`\{\|\}~
+            #new_word =  re.sub('^[0-9#!\$\?\.\*\|\{\}\+_:\-=· ]*','',word)
+            new_word =  re.sub('^([0-9#!\$¿\?\.\*<>\)\|,\-\+_:=\·]|[a-z]\.)*','',word)
             #new_word =  re.sub('^[#!\$\?\.\*\|\{\}\+-_:=·• ]*','',word)
             new_word = new_word.upper()
             new_words.append(new_word)
@@ -57,7 +88,7 @@ class PreProcessing:
         for word in words:
             word = word.lower()
             #\$%&\'\(\)\*\+,\-./:;<=>\?@\[\\\]\^_\`\{\|\}~
-            new_word =  re.sub('^[0-9#!$?.*()|+_:=·- ]*','',word)
+            new_word =  re.sub('^[0-9#!$¿.*()|+_:=·- ]*','',word)
             new_word = new_word.upper()
             new_words.append(new_word)
         return new_words
@@ -69,7 +100,7 @@ class PreProcessing:
             #\$%&\'\(\)\*\+,\-./:;<=>\?@\[\\\]\^_\`\{\|\}~
             word = word.lower()
             #new_word =  re.sub('[!\?\.\*\|\{\}\+_:-=· ]*$','',word)
-            new_word =  re.sub('[!$?.,*()|_:=·\- ]*$','',word)
+            new_word =  re.sub('[!$?.,<>*(|_:=·\- ]*$','',word)
             new_word = new_word.upper()
             new_words.append(new_word)
         return new_words

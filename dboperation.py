@@ -1,4 +1,5 @@
 import psycopg2
+from datetime import datetime
 
 class DBOferta:
     def __init__(self):
@@ -12,10 +13,10 @@ class DBOfertadetalle:
         mydb = connection.connect()
         try:
             mycursor = mydb.cursor()
-            sql = """SELECT id_ofertadetalle,ofertaperfil_id,descripcion_normalizada,count(*) 
+            sql = """SELECT id_ofertadetalle,ofertaperfil_id,descripcion,count(*) 
                      FROM oferta_detalle 
                      WHERE ofertaperfil_id=3
-                     GROUP BY id_ofertadetalle,ofertaperfil_id,descripcion_normalizada 
+                     GROUP BY id_ofertadetalle,ofertaperfil_id,descripcion 
                      ORDER BY 1,2,3 ASC
                      """
             #params f (requisito["descripcion_normalizada"], requisito["iddescripcion"])
@@ -39,13 +40,14 @@ class DBOfertadetalle:
 
         return array_de_tuplas
 
-    def update_ofertadetalle_normalized(self,connection,requisito):
+    def update_ofertadetalle_normalized(self,connection,requisito,equipo):
         mydb = connection.connect()
+        fecha_modificacion = datetime.today().strftime('%Y-%m-%d')
         try:
             mycursor = mydb.cursor()
-            sql = "UPDATE OFERTA_DETALLE SET descripcion2=%s where id_ofertadetalle=%s"
+            sql = "UPDATE OFERTA_DETALLE SET descripcion_normalizada=%s,f_equipo=%s,equipo=%s where id_ofertadetalle=%s"
             #params = (requisito["descripcion_normalizada"], requisito["iddescripcion"])
-            params = (requisito[2], requisito[0])
+            params = (requisito[2],fecha_modificacion,equipo,requisito[0])
             mycursor.execute(sql, params)
             mydb.commit()
         except (Exception, psycopg2.DatabaseError) as error:
@@ -83,10 +85,11 @@ class DBOfertadetalle:
 
     def update_ofertadetalle(self, connection, requisito):
         mydb = connection.connect()
+        fecha_modificacion = datetime.today().strftime('%Y-%m-%d')
         try:
             mycursor = mydb.cursor()
-            sql = "UPDATE OFERTA_DETALLE SET descripcion_normalizada=:1 where id_ofertadetalle=:2"
-            params = (requisito["descripcion_normalizada"], requisito["iddescripcion"])
+            sql = "UPDATE OFERTA_DETALLE SET descripcion_normalizada=:1,fecha_equipo=:2 where id_ofertadetalle=:3"
+            params = (requisito["descripcion_normalizada"],fecha_modificacion, requisito["iddescripcion"])
 
             mycursor.execute(sql, params)
             mydb.commit()
