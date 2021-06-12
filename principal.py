@@ -19,9 +19,9 @@ if __name__ == "__main__":
 	preprocessing = PreProcessing()
 	con = connect_bd()
 	oferta_detalle = controller.dbofertadetalle
-	datos = oferta_detalle.select_ofertadetalle_dimension(con,3)
+	datos = oferta_detalle.select_ofertadetalle_dimension2(con,3)
 	datos = np.array(datos)
-	i = 2#columna que queremos obtener
+	i = 1#columna que queremos obtener
 	matrix = [fila[i] for fila in datos]
 
 	#normalizar data
@@ -32,17 +32,16 @@ if __name__ == "__main__":
 	matrix = preprocessing.remove_punctuation_space_end(matrix)
 	matrix = preprocessing.remove_space(matrix)
 	
-
-
 	#modificar la columna de descripcion
 	for indice in range(0,len(matrix)):
-		datos[indice][2] = matrix[indice]
+		datos[indice][1] = matrix[indice]
 
-	print("Procesando....")
+	oferta_detalle.update_ofertadetalle_normalized2(con,datos,"CloudX")
+	# print("Procesando....")
 	#actualizar bbdd
-	for row in datos:
-		oferta_detalle.update_ofertadetalle_normalized(con,row,"CloudX")
-	print("Fin....")
+	# for row in datos:
+	# 	oferta_detalle.update_ofertadetalle_normalized(con,row,"CloudX")
+	# print("Fin....")
 
 	# cadena = ['1.12222222222','A.   DSDSD']
 	# cadena = preprocessing.remove_punctuation_space_start2(cadena)

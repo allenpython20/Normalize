@@ -18,6 +18,38 @@ class DBOfertadetalle:
                      WHERE ofertaperfil_id=3
                      GROUP BY id_ofertadetalle,ofertaperfil_id,descripcion 
                      ORDER BY 1,2,3 ASC
+                     LIMIT 100
+                     """
+            #params f (requisito["descripcion_normalizada"], requisito["iddescripcion"])
+            mycursor.execute(sql)
+
+            array_de_tuplas = []
+            row = mycursor.fetchone()
+            while row is not None:
+                array_de_tuplas.append(row)
+                row = mycursor.fetchone()
+
+            # close the communication with the PostgreSQL
+            mycursor.close()
+            mydb.close() 
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print ("-------------Exception, psycopg2.DatabaseError-------------------")
+            print (error)
+            print("OFERTA DETALLE UPDATE OFERTA_DETALLE ERROR")
+            mydb.close()
+
+        return array_de_tuplas
+
+    def select_ofertadetalle_dimension2(self,connection,dimension):
+        mydb = connection.connect()
+        try:
+            mycursor = mydb.cursor()
+            sql = """SELECT id_ofertadetalle,descripcion
+                     FROM oferta_detalle 
+                     WHERE ofertaperfil_id=3
+                     GROUP BY id_ofertadetalle,descripcion 
+                     ORDER BY 1,2 ASC
                      """
             #params f (requisito["descripcion_normalizada"], requisito["iddescripcion"])
             mycursor.execute(sql)
@@ -55,6 +87,32 @@ class DBOfertadetalle:
             print (error)
             print("OFERTA DETALLE UPDATE OFERTA_DETALLE ERROR")
             mydb.close()
+
+    def update_ofertadetalle_normalized2(self,connection,requisito,equipo):
+        mydb = connection.connect()
+        fecha_modificacion = datetime.today().strftime('%Y-%m-%d')
+        try:
+            mycursor = mydb.cursor()
+            sql = "CREATE TEMP TABLE temp_od(DKEY INTEGER, DVALUE TEXT)"
+            mycursor.execute(sql)
+            print("CREANDO....")
+            mydb.commit()
+            sql = "INSERT INTO temp_od (DKEY, DVALUE) VALUES(%s, %s)"
+            print("INSERTANDO....")
+            mycursor.executemany(sql, requisito)
+            mydb.commit()
+            sql = """UPDATE oferta_detalle
+                        SET    descripcion_normalizada = temp_od.dvalue
+                        FROM   temp_od
+                        WHERE  oferta_detalle.id_ofertadetalle = temp_od.dkey;"""
+            print("ACTUALIZANDO....")            
+            mycursor.execute(sql)
+            mydb.commit()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print ("-------------Exception, psycopg2.DatabaseError-------------------")
+            print (error)
+            print("OFERTA DETALLE UPDATE OFERTA_DETALLE ERROR")
+            mydb.close() 
 
 
     def select_ofertadetalle(self,connection):
