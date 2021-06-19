@@ -22,12 +22,13 @@ class DBOfertadetalle:
                     on (od.ofertaperfil_id=opt.ofertaperfil_id)
                     where  length(trim(od.descripcion_normalizada))<=120
                     and o.id_estado is null and opt.ofertaperfil_id is null and ind_activo is null
-                    and ( position(%s in trim(descripcion_normalizada))>0
+                    and ( position( %s in trim(descripcion_normalizada))>0
+                    and %s=1
                     --or position('VISITA DE INMUEBLES.' in trim(descripcion_normalizada))>0
                     )
                     order by 2;
                     """
-            params = (word)
+            params = (word,1)
             mycursor.execute(sql,params)
             array_de_tuplas = []
             row = mycursor.fetchone()

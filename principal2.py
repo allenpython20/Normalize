@@ -20,6 +20,12 @@ if __name__ == "__main__":
 	con = connect_bd()
 	oferta_detalle = controller.dbofertadetalle
 	
-	words=["JAVA"]
+	words=["JAVA","PYTHON","DEVOPS"]
+	id_rows = []
 	for w in words:
-		print(oferta_detalle.filtrar(con,w))
+		rows = oferta_detalle.filtrar(con,w)
+		for row in rows:
+			id_rows.append(row[0])
+
+	print(id_rows)
+		
