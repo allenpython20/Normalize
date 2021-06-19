@@ -47,9 +47,10 @@ class DBOfertadetalle:
             mycursor = mydb.cursor()
             sql = """SELECT id_ofertadetalle,descripcion
                      FROM oferta_detalle 
-                     WHERE ofertaperfil_id=3
+                     WHERE ofertaperfil_id=3 
                      GROUP BY id_ofertadetalle,descripcion 
                      ORDER BY 1,2 ASC
+                     LIMIT 5000
                      """
             #params f (requisito["descripcion_normalizada"], requisito["iddescripcion"])
             mycursor.execute(sql)
@@ -102,11 +103,11 @@ class DBOfertadetalle:
             mycursor.executemany(sql, requisito)
             mydb.commit()
             sql = """UPDATE oferta_detalle
-                        SET    descripcion_normalizada = temp_od.dvalue
+                        SET descripcion_normalizada = temp_od.dvalue
                         FROM   temp_od
                         WHERE  oferta_detalle.id_ofertadetalle = temp_od.dkey;"""
-            print("ACTUALIZANDO....")            
-            mycursor.execute(sql)
+            print("ACTUALIZANDO....")   
+            mycursor.execute(sql)         
             mydb.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print ("-------------Exception, psycopg2.DatabaseError-------------------")

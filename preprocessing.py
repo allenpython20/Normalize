@@ -43,7 +43,7 @@ class PreProcessing:
 
     def remove_incomplete_tags_html(self,words):
         new_words = []
-        rep = {"<STRONG": "", "STRONG>": ""} # define desired replacements here
+        rep = {"<STRONG": "", "STRONG>": "","ENDIF":""} # define desired replacements here
         for word in words:
             rep = dict((re.escape(k), v) for k, v in rep.items()) 
             pattern = re.compile("|".join(rep.keys()))
