@@ -19,13 +19,27 @@ if __name__ == "__main__":
 	preprocessing = PreProcessing()
 	con = connect_bd()
 	oferta_detalle = controller.dbofertadetalle
-	
-	words=["JAVA","PYTHON","DEVOPS"]
-	id_rows = []
+	# words=[' C ','C++','JAVA','PYTHON','SQL','.NET',' R ',
+	# 		'MYSQL','ORACLE',
+	# 		'IBM','WORD','ACCES','ISO',
+	# 		'ANDROID','COBOL','PERL','WEB','WEB SERVICES','API DE GOOGLE','APLICACIONES','SOFTWARE', 
+	# 		'REST'
+	# 	]
+
+	words=['JASPER REPORTS']
+
+	nro_rows = 0
 	for w in words:
 		rows = oferta_detalle.filtrar(con,w)
-		for row in rows:
-			id_rows.append(row[0])
+		nro_rows += len(rows)
+		print(rows,"\n")
+		#oferta_detalle.update_tuple(con,rows,"CloudX")
+		# for row in rows:
+		# 	id_rows.append(row)
 
-	print(id_rows)
+	print(nro_rows)
+
+	#id_strings = ','.join(map(str,id_rows))
+
+	#oferta_detalle.update_tuple(con,id_rows,"CloudX")
 		

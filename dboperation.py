@@ -9,11 +9,29 @@ class DBOfertadetalle:
     def __init__(self):
         pass
 
+    #QUERY PARA CLASIFICAR LA TUPLAR SEGUN DIMENSION
+    def update_tuple(self,connection,ids,equipo):
+        mydb = connection.connect()
+        fecha_modificacion = datetime.today().strftime('%Y-%m-%d')
+        try:
+           
+            mycursor = mydb.cursor()
+            sql = 'UPDATE oferta_detalle SET ofertaperfil_id=3,f_equipo=%s,equipo =%s WHERE id_ofertadetalle IN (' + ','.join(map(str, ids)) + ')' 
+            params = (fecha_modificacion,equipo)
+            mycursor.execute(sql, params)
+            mydb.commit()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print ("-------------Exception, psycopg2.DatabaseError-------------------")
+            print (error)
+            print("OFERTA DETALLE UPDATE OFERTA_DETALLE ERROR")
+            mydb.close()    
+
+
     def filtrar(self,connection,word):
         mydb = connection.connect()
         try:
             mycursor = mydb.cursor()
-            sql = """select od.id_ofertadetalle,trim(od.descripcion_normalizada) as descripcion
+            sql = """select od.id_ofertadetalle
                     from webscraping w inner join oferta o
                     on (w.id_webscraping=o.id_webscraping)
                     inner join oferta_detalle od
@@ -26,14 +44,14 @@ class DBOfertadetalle:
                     and %s=1
                     --or position('VISITA DE INMUEBLES.' in trim(descripcion_normalizada))>0
                     )
-                    order by 2;
+                    
                     """
             params = (word,1)
             mycursor.execute(sql,params)
             array_de_tuplas = []
             row = mycursor.fetchone()
             while row is not None:
-                array_de_tuplas.append(row)
+                array_de_tuplas.append(row[0])
                 row = mycursor.fetchone()
 
             # close the communication with the PostgreSQL
