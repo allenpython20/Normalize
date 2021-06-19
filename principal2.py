@@ -20,3 +20,6 @@ if __name__ == "__main__":
 	con = connect_bd()
 	oferta_detalle = controller.dbofertadetalle
 	
+	words=["JAVA"]
+	for w in words:
+		print(oferta_detalle.filtrar(w))
