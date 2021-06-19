@@ -9,6 +9,44 @@ class DBOfertadetalle:
     def __init__(self):
         pass
 
+    def filtrar(self,word):
+        mydb = connection.connect()
+        try:
+             mycursor = mydb.cursor()
+             sql = """select od.id_ofertadetalle,trim(od.descripcion_normalizada) as descripcion
+                    from webscraping w inner join oferta o
+                    on (w.id_webscraping=o.id_webscraping)
+                    inner join oferta_detalle od
+                    on (o.id_oferta=od.id_oferta)
+                    left outer join ofertaperfil_tipo opt
+                    on (od.ofertaperfil_id=opt.ofertaperfil_id)
+                    where  length(trim(od.descripcion_normalizada))<=120
+                    and o.id_estado is null and opt.ofertaperfil_id is null and ind_activo is null
+                    and ( position(%s in trim(descripcion_normalizada))>0
+                    --or position('VISITA DE INMUEBLES.' in trim(descripcion_normalizada))>0
+                    )
+                    order by 2;
+                    """
+            params = (word)
+            mycursor.execute(sql,params)
+            array_de_tuplas = []
+            row = mycursor.fetchone()
+            while row is not None:
+                array_de_tuplas.append(row)
+                row = mycursor.fetchone()
+
+            # close the communication with the PostgreSQL
+            mycursor.close()
+            mydb.close() 
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print ("-------------Exception, psycopg2.DatabaseError-------------------")
+            print (error)
+            print("OFERTA DETALLE UPDATE OFERTA_DETALLE ERROR")
+            mydb.close()
+
+        return array_de_tuplas
+        
     def select_ofertadetalle_dimension(self,connection,dimension):
         mydb = connection.connect()
         try:
