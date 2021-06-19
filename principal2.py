@@ -22,4 +22,4 @@ if __name__ == "__main__":
 	
 	words=["JAVA"]
 	for w in words:
-		print(oferta_detalle.filtrar(w))
+		print(oferta_detalle.filtrar(con,w))
