@@ -26,7 +26,7 @@ if __name__ == "__main__":
 	# 		'REST'
 	# 	]
 
-	words=['JASPER REPORTS']
+
 
 	nro_rows = 0
 	for w in words:
