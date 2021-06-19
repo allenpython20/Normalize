@@ -23,7 +23,7 @@ if __name__ == "__main__":
 	# 		'MYSQL','ORACLE',
 	# 		'IBM','WORD','ACCES','ISO',
 	# 		'ANDROID','COBOL','PERL','WEB','WEB SERVICES','API DE GOOGLE','APLICACIONES','SOFTWARE', 
-	# 		'REST','TYPESCRIPT','PYTHON','LINUX','HTML5','CSS3','FRAMEWORK'
+	# 		'REST','TYPESCRIPT','PYTHON','LINUX','HTML5','CSS3','FRAMEWORK','AJAX'
 	# 	]
 
 	nro_rows = 0
@@ -36,8 +36,3 @@ if __name__ == "__main__":
 		# 	id_rows.append(row)
 
 	print(nro_rows)
-
-	#id_strings = ','.join(map(str,id_rows))
-
-	#oferta_detalle.update_tuple(con,id_rows,"CloudX")
-		
