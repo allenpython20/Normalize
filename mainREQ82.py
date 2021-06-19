@@ -23,10 +23,8 @@ if __name__ == "__main__":
 	# 		'MYSQL','ORACLE',
 	# 		'IBM','WORD','ACCES','ISO',
 	# 		'ANDROID','COBOL','PERL','WEB','WEB SERVICES','API DE GOOGLE','APLICACIONES','SOFTWARE', 
-	# 		'REST'
+	# 		'REST','TYPESCRIPT','PYTHON','LINUX','HTML5','CSS3'
 	# 	]
-
-
 
 	nro_rows = 0
 	for w in words:
