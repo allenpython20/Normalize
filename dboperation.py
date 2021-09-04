@@ -42,9 +42,9 @@ class DBOfertadetalle:
                     and ( position( %s in trim(descripcion_normalizada))>0
                     and %s=1
                     --or position('VISITA DE INMUEBLES.' in trim(descripcion_normalizada))>0
-                    )
-                    
+                    )                  
                     """
+                    
             params = (word,1)
             mycursor.execute(sql,params)
             array_de_tuplas = []
@@ -71,7 +71,7 @@ class DBOfertadetalle:
             mycursor = mydb.cursor()
             sql = """SELECT id_ofertadetalle,ofertaperfil_id,descripcion,count(*) 
                      FROM oferta_detalle 
-                     WHERE ofertaperfil_id=3
+                     WHERE ofertaperfil_id = 3
                      GROUP BY id_ofertadetalle,ofertaperfil_id,descripcion 
                      ORDER BY 1,2,3 ASC
                      LIMIT 100
@@ -103,7 +103,7 @@ class DBOfertadetalle:
             mycursor = mydb.cursor()
             sql = """SELECT id_ofertadetalle,descripcion
                      FROM oferta_detalle 
-                     WHERE ofertaperfil_id=3 
+                     WHERE ofertaperfil_id = 3 
                      GROUP BY id_ofertadetalle,descripcion 
                      ORDER BY 1,2 ASC
                      LIMIT 5000
